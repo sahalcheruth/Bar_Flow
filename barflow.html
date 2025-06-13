@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bar Animation</title>
+    <style>
+        /* === Global Styles === */
+        body {
+            background: #f4f4f4;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* === Container for the whole content === */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        /* === Canvas Area: Holds the animated bars === */
+        .canvas {
+            width: 100%;
+            height: 300px;
+            background-color: #0a0e2a;
+            background-image: radial-gradient(rgb(54, 69, 79) 0.5px, transparent 0.5px); /* dotted background */
+            background-size: 5px 5px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* === Default bar style === */
+        .bar {
+            flex: 1;
+            background-color: rgb(137, 112, 200);
+            height: 50px;
+            transition: height 0.5s ease;
+            background-image: radial-gradient(gray 0.5px, transparent 0.5px); /* dotted overlay on bars */
+            background-size: 5px 5px;
+        }
+
+        /* === Individual bar color overrides === */
+        .bar:nth-child(2) { background-color: hotpink; }
+        .bar:nth-child(3) { background-color: salmon; }
+        .bar:nth-child(4) { background-color: rgb(238, 177, 65); }
+        .bar:nth-child(5) { background-color: rgb(249, 222, 69); }
+
+        /* === Button group container === */
+        .buttons {
+            margin-top: 30px;
+        }
+
+        /* === Button styles === */
+        .btn {
+            padding: 20px 60px;
+            font-size: 20px;
+            margin: 100px;
+            cursor: pointer;
+            border: none;
+            border-radius: 0px;
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+            background-image: radial-gradient(rgb(54, 69, 79) 1px, transparent 1px); /* dotted button background */
+            background-size: 5px 5px;
+        }
+
+        /* === Bar margin helpers for spacing === */
+        .bar2 { margin-left: 15px; margin-bottom: 15px; margin-top: 15px; }
+        .bar3, .bar4, .bar5 { margin-top: 15px; margin-bottom: 15px; }
+        .bar6 { margin-right: 15px; margin-bottom: 15px; margin-top: 15px; }
+
+        /* === Button color variants === */
+        #startBtn { background-color: green; }
+        #resetBtn { background-color: purple; }
+        #stopBtn { background-color: red; }
+    </style>
+</head>
+<body>
+
+    <!-- Title Placeholder -->
+    <h2></h2>
+
+    <!-- Main Content Container -->
+    <div class="container">
+
+        <!-- Bar Animation Canvas -->
+        <div class="canvas" id="canvas">
+            <div class="bar bar2"></div>
+            <div class="bar bar3"></div>
+            <div class="bar bar4"></div>
+            <div class="bar bar5"></div>
+            <div class="bar bar6"></div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="buttons">
+            <button class="btn" id="startBtn">Start</button>
+            <button class="btn" id="resetBtn">Reset</button>
+            <button class="btn" id="stopBtn">Stop</button>
+        </div>
+    </div>
+
+    <!-- Animation Logic -->
+    <script>
+        // === Get DOM Elements ===
+        const bars = document.querySelectorAll('.bar');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const stopBtn = document.getElementById('stopBtn');
+
+        let interval;
+        let isRunning = false;
+
+        // === Animate bars with random height (keeping 25px top space) ===
+        function animateBars() {
+            const canvasHeight = 300;
+            const topSpacing = 25;
+            const maxBarHeight = canvasHeight - topSpacing;
+
+            bars.forEach(bar => {
+                const randomHeight = Math.floor(Math.random() * maxBarHeight);
+                const heightPercent = (randomHeight / canvasHeight) * 100;
+                bar.style.height = heightPercent + '%';
+            });
+        }
+
+        // === Start animation ===
+        startBtn.onclick = () => {
+            if (!isRunning) {
+                interval = setInterval(animateBars, 500);
+                isRunning = true;
+            }
+        };
+
+        // === Stop animation ===
+        stopBtn.onclick = () => {
+            clearInterval(interval);
+            isRunning = false;
+        };
+
+        // === Reset bars to default height ===
+        resetBtn.onclick = () => {
+            bars.forEach(bar => {
+                bar.style.height = '90%';
+            });
+            clearInterval(interval);
+            isRunning = false;
+        };
+    </script>
+</body>
+</html>
